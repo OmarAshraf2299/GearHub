@@ -1,12 +1,15 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { logoutUser } from '../../utils/authService'
-import './Navbar.css'
-import logo from '../../assets/logo-parts.webp'
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { logoutUser } from '../../utils/authService';
+import { FiHome, FiShoppingBag, FiShoppingCart, FiInbox, FiSettings, FiLogOut, FiUser } from 'react-icons/fi';
+import './Navbar.css';
+import logo from '../../assets/logo-parts.webp';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
   const isLoggedIn = !!token;
 
   const handleLogout = async () => {
@@ -15,88 +18,88 @@ const Navbar = () => {
   };
 
   return (
-    <>
-    <div className='navbar '>
-      <ul className='logo-list flex items-center gap-2'>
-        <li>
-          <Link to="/"><img src={logo} alt='logo' className='logo' /></Link>
-        </li>
-        <li className='logo-text '>
-          <span >Gear <span className='logo-red '>Hub </span></span>
-          <span className='logo-subtext'>Auto Parts and Accessories</span>
-        </li>
-      </ul>
+    <header className="navbar-container">
+      {/* Main Nav Bar */}
+      <div className="navbar-glass">
+        {/* Logo */}
+        <Link to="/" className="navbar-brand">
+          <div className="logo-wrapper">
+            <img src={logo} alt="GearHub Logo" className="logo-img" />
+          </div>
+          <div className="brand-text">
+            <span className="brand-main">Gear<span className="brand-highlight">Hub</span></span>
+            <span className="brand-sub">Auto Parts &amp; Accessories</span>
+          </div>
+        </Link>
 
-      <ul className='nav-links items-center'>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/products">All Products</Link></li>
-        {isLoggedIn ? (
-          <>
-            {user.role === 'TRADER' && <li><Link to="/trader">Trader Panel</Link></li>}
-            {user.role === 'ADMIN' && <li><Link to="/trader">Admin Panel</Link></li>}
-            <li><Link to="/orders">Orders</Link></li>
-            {user.role !== 'TRADER' && <li><Link to="/cart">Cart</Link></li>}
-            <li>
-              <button onClick={handleLogout} className="text-black hover:text-gray-700">Logout</button>
-            </li>
-          </>
-        ) : (
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        )}
-      </ul>
-    </div>
-    <div className='companies'>
+        {/* Navigation Links */}
+        <nav className="nav-menu">
+          <Link to="/" className="nav-link">
+            <FiHome className="nav-icon" />
+            <span>Home</span>
+          </Link>
+          <Link to="/products" className="nav-link">
+            <FiShoppingBag className="nav-icon" />
+            <span>All Products</span>
+          </Link>
 
-    <div className='companies-navbar '>
-        <ul className='companies-list'>
+          {isLoggedIn ? (
+            <>
+              {(user.role === 'TRADER' || user.role === 'ADMIN') && (
+                <Link to="/trader" className="nav-link nav-link--dashboard">
+                  <FiSettings className="nav-icon" />
+                  <span>{user.role === 'ADMIN' ? 'Admin Panel' : 'Trader Panel'}</span>
+                </Link>
+              )}
+              <Link to="/orders" className="nav-link">
+                <FiInbox className="nav-icon" />
+                <span>Orders</span>
+              </Link>
+              {user.role !== 'TRADER' && (
+                <Link to="/cart" className="nav-link">
+                  <FiShoppingCart className="nav-icon" />
+                  <span>Cart</span>
+                </Link>
+              )}
 
-    <li>
-    <Link to="/products">Interior</Link>
-    </li>
-    <li>
-    <Link to="/products">Exterior</Link>
-    </li>
-    <li>
-    <Link to="/products">Body Panels</Link>
-    </li>
-    <li>
-    <Link to="/products">Wheels & Tires</Link>
-    </li>
-    <li>
-    <Link to="/products">Lighting</Link>
-    </li>
-    <li>
-    <Link to="/products">HVAC</Link>
-    </li>
+              {/* User Profile */}
+              <div className="user-profile-nav">
+                <div className="avatar-circle">
+                  {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className="user-info">
+                  <span className="user-name">{user.username || 'User'}</span>
+                  <span className="user-role-badge">{user.role}</span>
+                </div>
+                <button onClick={handleLogout} title="Logout" className="logout-btn">
+                  <FiLogOut />
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link to="/login" className="login-nav-btn">
+              <FiUser className="nav-icon" />
+              <span>Login / Register</span>
+            </Link>
+          )}
+        </nav>
+      </div>
 
-        </ul>
+      {/* Sub-categories bar — hidden on auth pages */}
+      {!isAuthPage && (
+        <div className="sub-navbar">
+          <div className="sub-navbar-inner">
+            <Link to="/products" className="sub-nav-link">Interior</Link>
+            <Link to="/products" className="sub-nav-link">Exterior</Link>
+            <Link to="/products" className="sub-nav-link">Body Panels</Link>
+            <Link to="/products" className="sub-nav-link">Wheels &amp; Tires</Link>
+            <Link to="/products" className="sub-nav-link">Lighting</Link>
+            <Link to="/products" className="sub-nav-link">HVAC</Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
 
-    </div>
-
-</div>
-    
-    
-    
-    
-    </>
-    
-    
-  )
-}
-
-export default Navbar 
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Navbar;

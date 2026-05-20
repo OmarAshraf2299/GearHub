@@ -1,37 +1,26 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
-import { registerUser } from '../../../utils/authService'
-import './signup.css'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { registerUser } from '../../../utils/authService';
+import { FiUser, FiMail, FiLock, FiUserPlus, FiAlertCircle } from 'react-icons/fi';
+import './signup.css';
 
-const passwordSchema = z.string().refine((val) => {
-  // at least 1 lowercase, 1 uppercase, 1 digit, 1 special char
-  return (
-    /[a-z]/.test(val) &&
-    /[A-Z]/.test(val) &&
-    /[0-9]/.test(val) &&
-    /[^A-Za-z0-9]/.test(val)
-  );
-}, { message: "Password must include lowercase, uppercase, number, and special character" });
+const passwordSchema = z.string().refine((val) => (
+  /[a-z]/.test(val) && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val)
+), { message: "Password must include uppercase, lowercase, number, and special character" });
 
 function Signup() {
   const navigate = useNavigate();
   const [userType, setUserType] = useState('customer');
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    // const repassword = e.target.repassword.value;
 
-    // if (password !== repassword) {
-    //   setErrorMsg("password and repassword do not match!");
-    //   return;
-    // }
-
-    // Validate the password using Zod schema
     const result = passwordSchema.safeParse(password);
     if (!result.success) {
       setErrorMsg(result.error?.errors?.[0]?.message || "Invalid password");
@@ -39,152 +28,108 @@ function Signup() {
     }
 
     try {
-      // Create user with the selected role
-      await registerUser(username, email, password, userType.toUpperCase());
-      
+      setLoading(true);
       setErrorMsg('');
-      // Redirect to login after successful signup
+      await registerUser(username, email, password, userType.toUpperCase());
       navigate('/login');
     } catch (error) {
-      if (error.message === "Failed to fetch") {
-        setErrorMsg("Cannot connect to server. Please try again later.");
-      } else {
-        setErrorMsg(error.message);
-      }
+      setErrorMsg(error.message === "Failed to fetch"
+        ? "Cannot connect to server. Please try again later."
+        : error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-page flex flex-col items-center min-h-[75vh]">
-      <h2 className="text-3xl font-bold mb-5 text-black">Create an Account</h2>
-      
-      {errorMsg && <p className="text-red-500 font-bold mb-4 bg-red-100 p-2 rounded w-80 text-center">{errorMsg}</p>}
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="glow-circle glow-circle-1"></div>
+        <div className="glow-circle glow-circle-2"></div>
 
-      <form className="form-login flex flex-col gap-4 w-80" onSubmit={handleSignup}>
-        
-        {/* <div className="flex gap-4">
-          <div className="first-name flex flex-col gap-2 w-1/2">
-            <label htmlFor="firstName" className="label-input text-white font-semibold text-sm">First Name</label>
-            <input 
-              id="firstName"
-              type="text" 
-              placeholder="First Name" 
-              className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-              required 
+        <h2 className="auth-title">Create Account</h2>
+        <p className="auth-subtitle">Join GearHub and get access to the top parts catalog</p>
+
+        {errorMsg && (
+          <div className="error-banner">
+            <FiAlertCircle className="error-icon" />
+            <p>{errorMsg}</p>
+          </div>
+        )}
+
+        <form className="auth-form" onSubmit={handleSignup}>
+          <div className="form-field">
+            <label htmlFor="username" className="auth-label">
+              <FiUser /> Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Username"
+              className="auth-input"
+              required
             />
           </div>
-          <div className="last-name flex flex-col gap-1 w-1/2">
-            <label htmlFor="lastName" className="label-input text-white font-semibold text-sm">Last Name</label>
-            <input 
-              id="lastName"
-              type="text" 
-              placeholder="Last Name" 
-              className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-              required 
+
+          <div className="form-field">
+            <label htmlFor="email" className="auth-label">
+              <FiMail /> Email Address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="email@example.com"
+              className="auth-input"
+              required
             />
           </div>
-        </div> */}
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="username" className="label-input text-black font-semibold text-sm">Username</label>
-          <input 
-            id="username"
-            name="username"
-            type="text" 
-            placeholder="Username" 
-            className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-            required 
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="label-input text-black font-semibold text-sm">Email</label>
-          <input 
-            id="email"
-            name="email"
-            type="email" 
-            placeholder="Email Address" 
-            className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-            required 
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="label-input text-black font-semibold text-sm">Password</label>
-          <input 
-            id="password"
-            name="password"
-            type="password" 
-            placeholder="Password" 
-            className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-            required 
-            minLength="8"
-          />
-        </div>
-
-        {/* <div className="flex flex-col gap-1">
-          <label htmlFor="repassword" className="label-input text-white font-semibold text-sm">Re-enter Password</label>
-          <input 
-            id="repassword"
-            name="repassword"
-            type="password" 
-            placeholder="Confirm Password" 
-            className="input-box border rounded text-black focus:outline-none focus:ring-2 focus:ring-gray-800" 
-            required 
-          />
-          {errorMsg && <span className="errortext text-red-500 text-sm font-bold mt-1 shadow-sm">{errorMsg}</span>}
-        </div> */}
-
-        <div className="radio-btn flex flex-col gap-5 mt-2">
-          <span className="label-input text-black font-semibold text-sm">Account Type</span>
-          <div className="radio-group flex gap-4">
-            <label className="flex items-center gap-2 cursor-pointer text-black">
-              <input 
-                type="checkbox" 
-                name="userType_customer" 
-                value="customer"
-                checked={userType === 'customer'}
-                onChange={() => setUserType('customer')}
-                className="w-4 h-4 cursor-pointer  accent-blue-400"
-              />
-              Customer
+          <div className="form-field">
+            <label htmlFor="password" className="auth-label">
+              <FiLock /> Password
             </label>
-
-            <label className="flex items-center gap-2 cursor-pointer text-black">
-              <input 
-                type="checkbox" 
-                name="userType_trader" 
-                value="trader"
-                checked={userType === 'trader'}
-                onChange={() => setUserType('trader')}
-                className="w-4 h-4 cursor-pointer accent-blue-400"
-              />
-              Trader
-            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Min. 8 characters"
+              className="auth-input"
+              required
+              minLength="8"
+            />
           </div>
-        </div>
 
-        <button 
-          type="submit" 
-          className="login-btn">
-          Sign Up
-        </button>
-      </form>
+          <div className="form-field">
+            <span className="auth-label">
+              <FiUser /> Account Type
+            </span>
+            <div className="account-type-group">
+              <button type="button" onClick={() => setUserType('customer')}
+                className={`type-btn ${userType === 'customer' ? 'type-btn--active' : ''}`}>
+                Customer
+              </button>
+              <button type="button" onClick={() => setUserType('trader')}
+                className={`type-btn ${userType === 'trader' ? 'type-btn--active' : ''}`}>
+                Trader
+              </button>
+            </div>
+          </div>
 
-      <p className="foot-signup mt-6 text-sm text-black font-medium ">
-        Already have an account? <Link to="/login" className="underline font-bold text-violet-500 hover:text-violet-300">Login</Link>
-      </p>
+          <button type="submit" disabled={loading} className="auth-submit-btn">
+            <FiUserPlus />
+            <span>{loading ? 'Creating Account...' : 'Sign Up'}</span>
+          </button>
+        </form>
+
+        <p className="auth-footer">
+          Already have an account?{' '}
+          <Link to="/login" className="auth-link">Login</Link>
+        </p>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Signup
-
-
-
-
-
-
-
-
-
+export default Signup;

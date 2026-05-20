@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
+import { FiBox, FiCalendar, FiUser, FiArrowRight, FiCheckCircle, FiClock, FiAlertTriangle, FiCheck } from 'react-icons/fi';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -31,11 +32,33 @@ export default function Orders() {
     }
   };
 
-  if (loading) return <div className="p-8 text-center">Loading orders...</div>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] gap-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <p className="text-gray-400">Loading orders...</p>
+      </div>
+    );
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'DELIVERED':
+        return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+      case 'ACCEPTED':
+      case 'PROCESSING':
+        return 'bg-blue-500/10 text-blue-400 border border-blue-500/30';
+      case 'DENIED':
+        return 'bg-red-500/10 text-red-400 border border-red-500/30';
+      case 'PENDING':
+      default:
+        return 'bg-amber-500/10 text-amber-400 border border-amber-500/30';
+    }
+  };
 
   const groupedOrders = isTraderOrAdmin 
     ? orders.reduce((acc, order) => {
-        const key = order.customer ? `${order.customer.name} (${order.customer.email})` : 'Unknown User';
+        const key = order.customer ? `${order.customer.name || 'User'} (${order.customer.email})` : 'Unknown User';
         if (!acc[key]) acc[key] = [];
         acc[key].push(order);
         return acc;
@@ -43,54 +66,104 @@ export default function Orders() {
     : { 'My Orders': orders };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto min-h-[70vh]">
-      <h2 className="text-3xl font-bold mb-6">{isTraderOrAdmin ? 'Active Orders by User' : 'My Orders'}</h2>
+    <div className="p-6 md:p-12 max-w-5xl mx-auto min-h-[85vh] animate-fade-in">
+      <div className="flex items-center gap-3 mb-8">
+        <FiBox className="text-3xl text-blue-500" />
+        <h2 className="text-3xl font-extrabold text-white">
+          {isTraderOrAdmin ? 'Customer Purchase Orders' : 'My Purchase Orders'}
+        </h2>
+      </div>
+
       {orders.length === 0 ? (
-        <p className="text-gray-500">You have no orders yet.</p>
+        <div className="glass-card text-center p-16 rounded-3xl max-w-xl mx-auto">
+          <FiBox className="text-6xl text-gray-600 mx-auto mb-6" />
+          <h3 className="text-2xl font-bold text-white mb-2">No Orders Placed</h3>
+          <p className="text-gray-400 max-w-sm mx-auto">
+            You don't have any purchase records inside your history directory yet.
+          </p>
+        </div>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-10">
           {Object.entries(groupedOrders).map(([groupTitle, userOrders]) => (
-            <div key={groupTitle} className="mb-8">
-              {isTraderOrAdmin && <h3 className="text-2xl font-bold mb-4 text-blue-800 border-b pb-2">{groupTitle}</h3>}
+            <div key={groupTitle} className="order-group">
+              {isTraderOrAdmin && (
+                <div className="flex items-center gap-3 mb-6 pb-2 border-b border-white/10">
+                  <FiUser className="text-blue-400 text-xl" />
+                  <h3 className="text-xl font-bold text-white">{groupTitle}</h3>
+                </div>
+              )}
+
               <div className="space-y-6">
-                {userOrders.map(order => (
-                  <div key={order.id} className="border p-6 rounded bg-white shadow">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-bold text-lg">Order #{order.id}</h3>
-                      <div className="flex items-center gap-4">
-                        <span className={`px-3 py-1 rounded font-bold text-white ${order.status === 'DELIVERED' ? 'bg-green-500' : order.status === 'ACCEPTED' ? 'bg-blue-500' : order.status === 'DENIED' ? 'bg-red-500' : 'bg-orange-500'}`}>
+                {userOrders.map((order) => (
+                  <div key={order.id} className="glass-card p-6 rounded-2xl border border-white/5 shadow-lg transition-all hover:border-white/10">
+                    
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/5">
+                      <div>
+                        <h4 className="font-extrabold text-white text-lg">Order #{order.id}</h4>
+                        <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
+                          <FiCalendar /> {new Date(order.createdAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+
+                      {/* Status select/pills */}
+                      <div className="flex items-center gap-3">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
                           {order.status}
                         </span>
+
                         {isTraderOrAdmin && order.status !== 'DELIVERED' && (
-                          <select 
-                            onChange={(e) => updateStatus(order.id, e.target.value)} 
-                            value={order.status}
-                            className="border p-1 rounded"
-                          >
-                            <option value="PENDING">PENDING</option>
-                            <option value="ACCEPTED">ACCEPTED</option>
-                            <option value="DENIED">DENIED</option>
-                            <option value="PROCESSING">PROCESSING</option>
-                            <option value="DELIVERED">DELIVERED</option>
-                          </select>
+                          <div className="relative">
+                            <select 
+                              onChange={(e) => updateStatus(order.id, e.target.value)} 
+                              value={order.status}
+                              className="bg-white/5 border border-white/10 hover:border-white/20 text-white text-xs font-semibold py-1 px-3 rounded-lg outline-none cursor-pointer transition-colors"
+                            >
+                              <option value="PENDING" className="bg-gray-900 text-white">PENDING</option>
+                              <option value="ACCEPTED" className="bg-gray-900 text-white">ACCEPTED</option>
+                              <option value="DENIED" className="bg-gray-900 text-white">DENIED</option>
+                              <option value="PROCESSING" className="bg-gray-900 text-white">PROCESSING</option>
+                              <option value="DELIVERED" className="bg-gray-900 text-white">DELIVERED</option>
+                            </select>
+                          </div>
                         )}
                       </div>
                     </div>
-                    <p className="text-gray-600 mb-4">Ordered on: {new Date(order.createdAt).toLocaleString()}</p>
-                    <div className="border-t pt-4">
-                      <h4 className="font-bold mb-2">Items:</h4>
-                      <ul className="space-y-2">
-                        {order.items.map(item => (
-                          <li key={item.id} className="flex justify-between">
-                            <span>{item.quantity}x {item.product?.name || 'Product'}</span>
-                            <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+
+                    {/* Order Items */}
+                    <div className="mb-6">
+                      <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Line Items</h5>
+                      <ul className="space-y-3">
+                        {order.items.map((item) => (
+                          <li key={item.id} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-blue-600/20 text-blue-400 text-xs font-bold px-2 py-0.5 rounded">
+                                {item.quantity}x
+                              </span>
+                              <span className="text-white text-sm font-semibold">{item.product?.name || 'Product'}</span>
+                            </div>
+                            <span className="text-white text-sm font-bold">
+                              E£ {((item.price || 0) * item.quantity).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                            </span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="mt-4 pt-4 border-t text-right">
-                      <p className="text-xl font-bold">Total: ${order.totalAmount?.toFixed(2) || '0.00'}</p>
+
+                    {/* Footer */}
+                    <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                      <span className="text-sm text-gray-400">Total Purchase</span>
+                      <span className="text-2xl font-extrabold text-blue-400">
+                        E£ {(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                      </span>
                     </div>
+
                   </div>
                 ))}
               </div>

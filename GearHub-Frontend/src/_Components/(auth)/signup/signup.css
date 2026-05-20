@@ -1,27 +1,2 @@
-
-
-
-.first-name{
-    width: 48%;
-    margin-right: 3%;
-}
-.last-name{
-    width: 49%;
-}
-
-
-
-.foot-signup{
-    margin-bottom: 1.5rem;
-}
-.radio-btn{
-    margin-bottom: 2rem;
-}
-.radio-group{
-        display: flex;
-        gap: 5rem;
-}
-.errortext{
-    margin-bottom: 2rem;
-    color: red;
-}
+/* Signup shares the same auth styles as login.css */
+@import '../login/login.css';

@@ -9,12 +9,13 @@ import Products from './_Components/Products/Products'
 import TraderPanel from './_Components/Trader/TraderPanel.jsx'
 import Orders from './_Components/Orders/Orders.jsx'
 import Cart from './_Components/Cart/Cart.jsx'
+import './App.css'
 
 function App() {
   return (
-    <div className='w-full flex flex-col min-h-screen'>
+    <div className="app-shell">
       <Navbar />
-      <div className="flex-grow">
+      <main className="app-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
@@ -24,7 +25,7 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
-      </div>
+      </main>
       <Footer />
     </div>
   )
