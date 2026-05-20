@@ -1,0 +1,210 @@
+.home {
+    width: 100%;
+    height: 100vh;
+    color: black;
+    background-image: url(../../assets/bgimage.webp);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+
+}
+.home-content{
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.home-title{
+    margin-bottom: 25px;
+    color: #fff;
+    font-family: Inter, sans-serif;
+    font-size: 60px;
+    font-weight: 800;
+}
+.home-description{
+    margin-bottom: 60px;
+    color: #fff;
+    font-family: Inter, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+}
+.search-box{
+    width: 40%;
+    height: 50px;
+    margin-top: 8px;
+    background-color: #fff;
+}
+.input-box{
+    width: 80%;
+    height: 100%;
+    padding: 0 16px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+
+}
+.button-box {
+    width: 20%;
+    height: 100%;
+    background-color: #989898;
+    font-family: Inter, sans-serif;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.foot-text{
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: Inter, sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.description-about{
+    width: 100%;
+    height: 50vh;
+    background-color:#E0E0E0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.description-title{
+    margin-bottom: 20px;
+    color: #000;
+    font-family: Inter, sans-serif;
+    font-size: 50px;
+    font-weight: 800;
+}
+.description-subtitle{
+    margin-bottom: 30px;
+    color: #ff2828;
+    font-family: Inter, sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+}
+.description-text{
+    width: 75%;
+    text-align: center;
+    color: #000;
+    font-family: Inter, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+.left-side{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-right: 20%;
+    margin-top: 10px;
+}
+.Navigation-side{
+    color: #fff;
+    margin-bottom: 20px;
+}
+.link-footer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.link-footer a{
+    color: #fff;
+}
+.right-side{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 20%;
+    margin-top: 10px;
+}
+.bottom-bar{
+    max-width: 7xl;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ 
+
+}
+.bottom-bar span{
+    color: #fff;
+    margin-right: 10%;
+
+}
+.bottom-bar a{
+    color: #fff;
+    margin-left: 10%;
+}
+
+@media (max-width: 768px) {
+    .home-title {
+        font-size: 32px;
+        text-align: center;
+        padding: 0 15px;
+    }
+    .home-description {
+        font-size: 16px;
+        text-align: center;
+        padding: 0 15px;
+    }
+    .search-box {
+        width: 90%;
+        display: flex;
+
+    }
+    .input-box {
+        width: 80%;
+        padding: 0 10px;
+    }
+    .button-box {
+        width: 30%;
+        font-size: 14px;
+        padding: 0 10px;
+    }
+    .foot-text {
+        font-size: 24px;
+    }
+    .home ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        padding: 0;
+    }
+    .home ul li {
+        list-style: none;
+    }
+    .home ul li img {
+        max-width: 60px;
+    }
+    .description-about {
+        height: auto;
+        padding: 40px 15px;
+    }
+    .description-title {
+        font-size: 28px;
+        text-align: center;
+    }
+    .description-subtitle {
+        font-size: 20px;
+        text-align: center;
+    }
+    .description-text {
+        width: 100%;
+        font-size: 15px;
+    }
+}

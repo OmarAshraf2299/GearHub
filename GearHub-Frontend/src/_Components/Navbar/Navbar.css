@@ -1,0 +1,121 @@
+.navbar{
+    width: 100%;
+    height: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #e7e7e7;
+}
+.logo{
+    width: 70px;
+    cursor: pointer;
+    border-radius: 100px;
+}
+.logo-text{
+    font-family: ui-sans-serif , system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
+    font-size: 26px;
+    font-weight: 700;
+}
+.logo-red{
+    color: #ff0000;
+    font-family: ui-sans-serif , system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
+    font-size: 26px;
+    font-weight: 700;
+}
+.logo-subtext{
+    font-family: ui-sans-serif , system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
+    font-size: 20px;
+    font-weight: 400;
+}
+ul li a{
+    flex: 1;
+    list-style: none;
+    text-align: right;
+
+}
+ul li {
+    display: inline-block;
+    margin-left: 15px ;
+    font-family: ui-sans-serif , system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    list-style: none;
+    
+
+}
+.nav-links {
+    margin-right: 5%;   
+    display: flex;
+    gap: 20px;
+    list-style: none;
+
+}
+
+.nav-links a{
+    color: #000000;
+    
+}
+.icon-links{
+    color: #0021f780 !important;
+    margin-right: 5px ;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.companies-navbar{
+    width: 100%;
+    height: 35px;
+    background-color: #313030;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 10;
+}
+.companies-list li a{
+    color: #fff;
+    list-style: none;
+}
+.list-style{
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 15px;
+    }
+    
+    .logo-text, .logo-subtext {
+        display: none;
+    }
+    
+    .nav-links {
+        margin-right: 0;
+        gap: 15px;
+        justify-content: center;
+        width: 100%;
+        padding: 0;
+    }
+
+    .companies-navbar {
+        height: auto;
+        padding: 10px 0;
+    }
+
+    .companies-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .companies-list li {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}

@@ -1,0 +1,228 @@
+.products-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 2.5rem 1rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.products-page__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.products-page__header {
+  margin-bottom: 2.5rem;
+}
+
+.products-page__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.025em;
+}
+
+.products-page__subtitle {
+  margin-top: 0.5rem;
+  color: #6b7280;
+}
+
+/* 3 cards per row on desktop */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.products-grid--empty {
+  grid-template-columns: 1fr;
+}
+
+.products-card {
+  min-width: 0;
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.products-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.products-card__image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f3f4f6;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.products-card__image-wrap img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.products-card:hover .products-card__image-wrap img {
+  transform: scale(1.05);
+}
+
+.products-card__favorite {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  color: #9ca3af;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.products-card__favorite:hover {
+  color: #ef4444;
+}
+
+.products-card__body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.products-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.products-card__name {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.products-card__category {
+  flex-shrink: 0;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+}
+
+.products-card__brand {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.products-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.products-card__meta span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.products-card__stock {
+  flex-shrink: 0;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.products-card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.products-card__cart-btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+  background: #f3f4f6;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.products-card__cart-btn:hover {
+  background: #e5e7eb;
+}
+
+.products-card__price {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: #2563eb;
+  font-variant-numeric: tabular-nums;
+}
+
+.products-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.products-empty__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.products-empty__text {
+  color: #6b7280;
+}
